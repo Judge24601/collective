@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Landing from "../views/Landing.vue";
+import Login from "../views/Login.vue";
 import Posts from "@/components/Posts.vue";
 import NewPost from "@/components/NewPost.vue";
 import EditPost from "@/components/EditPost.vue";
@@ -12,6 +13,11 @@ const routes = [
     path: "/",
     name: "landing",
     component: Landing
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: Login
   },
   {
     path: "/posts",
