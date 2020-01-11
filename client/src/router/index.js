@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+import Landing from "../views/Landing.vue";
 import Posts from "@/components/Posts.vue";
 import NewPost from "@/components/NewPost.vue";
 import EditPost from "@/components/EditPost.vue";
@@ -10,8 +10,8 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "home",
-    component: Home
+    name: "landing",
+    component: Landing
   },
   {
     path: "/posts",

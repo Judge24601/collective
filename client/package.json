@@ -8,6 +8,12 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "bootstrap-vue": "^2.0.4",
+    "flatpickr": "^4.5.1",
+    "nouislider": "^11.1.0",
+    "vue-flatpickr-component": "^8.1.1",
+    "vue-lazyload": "^1.2.6",
+    "vue2-transitions": "^0.2.3",
     "axios": "^0.19.1",
     "core-js": "^3.4.4",
     "register-service-worker": "^1.6.2",
@@ -25,6 +31,8 @@
     "@vue/eslint-config-prettier": "^5.0.0",
     "babel-eslint": "^10.0.3",
     "eslint": "^5.16.0",
+    "node-sass": "^4.11.0",
+    "sass-loader": "^7.1.0",
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-vue": "^5.0.0",
     "prettier": "^1.19.1",
@@ -39,7 +47,14 @@
       "plugin:vue/essential",
       "@vue/prettier"
     ],
-    "rules": {},
+    "rules": {
+      "no-unused-vars": [
+        "error",
+        {
+          "args": "none"
+        }
+      ]
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     }
