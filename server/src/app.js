@@ -153,6 +153,17 @@ app.get("/posts/:collectiveId", (req, res) => {
   }).sort({ _id: -1 });
 });
 
+// Fetch collective data for collective ID
+app.get("/collectives/:collectiveId", (req, res) => {
+  CollectiveModel.findById(req.params.collectiveId, "", function(error, collective) {
+    if (error) {
+      res.send('Error');
+    }
+
+    res.send(collective);
+  });
+});
+
 // Add new collective
 app.post("/collectives", (req, res) => {
   var title = req.body.title;
@@ -183,6 +194,7 @@ app.post("/collectives", (req, res) => {
 app.post("/collectives/:collectiveId", (req, res) => {
   var pollOption = req.body.pollOption;
   var collectiveId = req.params.collectiveId
+  console.log(req.body);
   //CollectiveModel.findByIdAndUpdate(collectiveId, {$push: {pollChoices: {values: pollOption, votes: 0}}});
   console.log("Poll option: " + pollOption + " collectiveId: " + collectiveId);
 
@@ -203,7 +215,7 @@ app.post("/collectives/:collectiveId", (req, res) => {
 // Increment poll option
 app.post("/collectives/:collectiveId/vote", (req, res) => {
   const choice = req.body.choice;
-  const identifier = `pollChoices.${choice}.votes`;
+  console.log('here');
   CollectiveModel.findById(req.params.collectiveId, function(error, collective) {
     console.log('Found collective: ' + collective.title + ' votes: ' + collective.pollChoices[0].votes);
     collective.pollChoices[choice].votes++;
