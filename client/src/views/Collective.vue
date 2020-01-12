@@ -4,69 +4,52 @@
       <!-- shape Hero -->
       <section class="section-shaped my-1 main">
         <div class="shape shape-style-1 bg-gradient-default"></div>
-        <div class="container">
-          <div>
-            <base-button
-              type="success"
-              class="newPost"
-              @click="modals.modal0 = true"
-            >
-              New Post
-            </base-button>
-            <router-link to="/search">TEMP</router-link>
-            <modal :show.sync="modals.modal0">
-              <template slot="header">
-                <h5 class="modal-title" id="exampleModalLabel">New Post</h5>
-              </template>
-              <form>
-                <base-input alternative v-model="new_title"></base-input>
-                <textarea
-                  v-model="new_description"
-                  class="form-control form-control-alternative"
-                  rows="3"
-                  placeholder="Write a large text here ..."
-                ></textarea>
-              </form>
-              <template slot="footer">
-                <base-button type="secondary" @click="modals.modal0 = false"
-                  >Close</base-button
-                >
-                <base-button type="primary" @click="addPost">Save</base-button>
-              </template>
-            </modal>
-          </div>
-          <div v-for="(post, index) in posts" :key="index" class="card-cont">
-            <card class="border-0" hover shadow body-classes="py-3">
-              <h3 class="text-primary text-uppercase">{{ post.title }}</h3>
-              <div class="card-inner">
-                <div class="voting">
-                  <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                  <i class="fa fa-thumbs-down" aria-hidden="true"></i>
-                </div>
-                <div class="content">
-                  <P class="description mt-1">{{ post.description }}</P>
-                  <tabs :fill="false" circle>
-                    <tab-pane title="Hide">
-                      <span slot="title" class="nav-link-icon d-block"
-                        ><i class="ni ni-fat-delete"></i
-                      ></span>
-                    </tab-pane>
-                    <tab-pane title="Replies">
-                      <span slot="title" class="nav-link-icon d-block"
-                        ><i class="ni ni-chat-round"></i
-                      ></span>
-                    </tab-pane>
-                    <tab-pane title="Share">
-                      <span slot="title" class="nav-link-icon d-block"
-                        ><i class="fa fa-share-alt" aria-hidden="true"></i
-                      ></span>
-                    </tab-pane>
-                  </tabs>
-                </div>
+          <div class="container">
+              <div class="new-post">
+                  <base-button type="success" size="lg" iconOnly rounded class="newPost" icon="fa fa-plus" @click="modals.modal0 = true">
+                  </base-button>
+                  <modal :show.sync="modals.modal0">
+                      <template slot="header">
+                          <h5 class="modal-title" id="exampleModalLabel">New Post</h5>
+                      </template>
+                      <form>
+                          <base-input alternative v-model="new_title" placeholder="Title"></base-input>
+                          <textarea v-model="new_description" class="form-control form-control-alternative" rows="3" placeholder="Content"></textarea>
+                      </form>
+                      <template slot="footer">
+                          <base-button type="secondary" @click="modals.modal0 = false">Close</base-button>
+                          <base-button type="primary" @click="addPost">Save</base-button>
+                      </template>
+                  </modal>
+
               </div>
-            </card>
+              <div v-for="(post, index) in posts" :key="index" class="card-cont">
+                  <card class="border-0" hover shadow body-classes="py-3">
+                      
+                      <div class="card-inner">
+                          <div class="voting">
+                              <i :id="'votingG'+ index" class="fa fa-thumbs-up" aria-hidden="true" @click="reactToPost(index, 'good')"></i>
+                              <i :id="'votingB'+ index" class="fa fa-thumbs-down" aria-hidden="true" @click="reactToPost(index, 'bad')"></i>
+                          </div>
+                          <div class="content">
+                              <h3 class="text-primary text-uppercase">{{ post.title }}</h3>
+                              <P class="description mt-1">{{ post.description }}</p>
+                              <tabs v-model="temp" :fill="false" circle>
+                                  <tab-pane title="Hide">
+                                          <span slot="title" class="nav-link-icon d-block"><i class="ni ni-fat-delete"></i></span>
+                                  </tab-pane>
+                                  <tab-pane title="Replies" @click="showReplies(post)">
+                                          <span slot="title" class="nav-link-icon d-block"><i class="ni ni-chat-round"></i></span>
+                                  </tab-pane>
+                                  <tab-pane title="Share">
+                                      <span slot="title" class="nav-link-icon d-block"><i class="fa fa-share-alt" aria-hidden="true"></i></span>
+                                  </tab-pane>
+                              </tabs>
+                          </div>
+                      </div>
+                  </card>
+              </div>
           </div>
-        </div>
       </section>
       <!-- 1st Hero Variation -->
     </div>
@@ -83,11 +66,13 @@ export default {
   components: {
     Tabs,
     TabPane,
-    Modal
+    Modal,
   },
   data() {
     return {
       posts: [],
+      postReplies: {},
+      temp: '',
       modals: {
         modal0: false
       },
@@ -109,12 +94,38 @@ export default {
       if (this.user && this.user.collective == undefined) {
         this.$router.push({ name: "landing" });
       }
+      this.getPosts()
     }
   },
   methods: {
     async getPosts() {
       const response = await PostsService.fetchPosts(this.user);
       this.posts = response.data.posts;
+    },
+    async showReplies (index) {
+      //temporary
+      console.log('show')
+      const response = await PostsService.fetchPosts(this.user);
+      this.postReplies = {...this.postReplies , index: response.data.posts}
+    },
+    hideReplies (index) {
+      this.postReplies = {...this.postReplies , index: []}
+    },
+
+    reactToPost(id, react) {
+      let good = document.getElementById('votingG' + id)
+      let bad = document.getElementById('votingB' + id)
+      if (react === 'good'){
+        good.classList.add('good');
+        if (bad.classList.contains('bad')) {
+          bad.classList.remove('bad')
+        }
+      }else {
+        bad.classList.add('bad');
+        if (good.classList.contains('good')) {
+          good.classList.remove('good')
+        }
+      }
     },
     async deletePost(id) {
       await PostsService.deletePost(id);
@@ -133,12 +144,18 @@ export default {
 };
 </script>
 <style>
-.newPost {
-  margin-top: -1rem;
-  margin-bottom: 1rem;
-}
-.main {
-  margin-top: 3.5rem !important;
-  margin-bottom: 2rem !important;
-}
+    .newPost {
+        margin-top: -1rem;
+        margin-bottom: 1rem;
+    }
+    .new-post {
+      position: fixed;
+      right: 7.5%;
+      bottom: 10%;
+      z-index: 3;
+    }
+    .main {
+      margin-top: 3.5rem !important;
+      margin-bottom: 2rem !important;
+    }
 </style>
