@@ -4,6 +4,7 @@
       <div class="row">
         <div class="input-group mb-4 search">
           <input
+            v-model="search"
             type="text"
             placeholder="Search by keyword"
             class="form-control form-control-alternative "
@@ -20,7 +21,7 @@
       </div>
       <div class="row">
         <div
-          v-for="(collective, index) in collectives"
+          v-for="(collective, index) in filteredCollectives"
           :key="index"
           @click="getModal(collective)"
           class=" card-cont col-md-4"
@@ -63,10 +64,19 @@ export default {
   computed: {
     user () {
       return this.$store.state.user
+    },
+    filteredCollectives () {
+      if (this.search.length > 2) {
+        let title = this.collectives.filter(x => x.title.includes(this.search))
+        let notes = this.collectives.filter(x => x.notes.includes(this.search))
+        return [...new Set([...title, ...notes])];
+      }
+      return this.collectives
     }
   },
   data() {
     return {
+      search: '',
       collectives: [],
       modals: {
         modal0: {
