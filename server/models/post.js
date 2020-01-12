@@ -1,11 +1,17 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
-var UserSchema = new Schema({
-  id: Number,
+var PostSchema = new Schema({
   title: String,
-  description: String
+  description: String,
+  userEmail: String,
+  collectiveId: String,
+  parentPostId: String,
+  replies: [
+    {
+      id: String
+    }
+  ]
 });
 
-var Post = mongoose.model("Post", UserSchema);
-module.exports = Post;
+module.exports = PostSchema;
