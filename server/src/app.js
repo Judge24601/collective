@@ -5,6 +5,7 @@ const morgan = require("morgan");
 const mongoose = require("mongoose");
 var Post = require("../models/post");
 const app = express();
+const stripe = require('stripe')('sk_test_tcmBJCQxZTDZxbo6Y9C4F6HX00qnugoRlW');
 app.use(morgan("combined"));
 app.use(bodyParser.json());
 app.use(cors());
@@ -14,6 +15,21 @@ var db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error"));
 db.once("open", function(callback) {
   console.log("Connection Succeeded");
+});
+
+// This creates a new Customer and attaches the PaymentMethod in one API call.
+const customer = await stripe.customers.create({
+  payment_method: 'pm_1FU2bgBF6ERF9jhEQvwnA7sX',
+  email: 'jenny.rosen@example.com',
+  invoice_settings: {
+    default_payment_method: 'pm_1FU2bgBF6ERF9jhEQvwnA7sX',
+  },
+});
+
+const subscription = await stripe.subscriptions.create({
+  customer: "cus_G02hIo15n8CU1s",
+  items: [{ plan: "plan_FSDjyHWis0QVwl" }],
+  expand: ["latest_invoice.payment_intent"]
 });
 
 // Add new post
@@ -96,5 +112,7 @@ app.delete("/posts/:id", (req, res) => {
     }
   );
 });
+
+
 
 app.listen(process.env.PORT || 8081);

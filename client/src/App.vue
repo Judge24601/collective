@@ -1,3 +1,4 @@
+<script src="https://js.stripe.com/v3/"></script>
 <template>
   <div id="app">
     <div id="nav">
@@ -7,6 +8,16 @@
     <router-view />
   </div>
 </template>
+
+<script>
+export default {
+  mounted() {
+    // let stripeScript = document.createElement("script");
+    // stripeScript.setAttribute("src", "https://js.stripe.com/v3/");
+    // document.head.appendChild(stripeScript);
+  }
+};
+</script>
 
 <style>
 #app {
