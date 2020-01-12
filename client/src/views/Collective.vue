@@ -91,7 +91,7 @@ export default {
   watch: {
     user () {
       console.log("test", this.user)
-      if (this.user && this.user.collective == undefined){
+      if (this.user && this.user != '' && this.user.collective == undefined){
         this.$router.push({ name: "landing" });
       }
     }

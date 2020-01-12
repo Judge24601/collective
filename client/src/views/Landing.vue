@@ -56,6 +56,14 @@ export default {
       return this.$store.state.user
     }
   },
+  watch: {
+    user () {
+      console.log("test", this.user)
+      if (this.user && this.user != '' && this.user.collective != undefined){
+        this.$router.push({ name: "collective" });
+      }
+    }
+  },
   methods: {
       // Log the user in
       login() {
