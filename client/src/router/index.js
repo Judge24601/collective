@@ -52,7 +52,7 @@ const routes = [
   },
   {
     path:"/search",
-    name: "Join a new Collective",
+    name: "Search",
     component: Search
   },
   {

@@ -22,6 +22,7 @@
         <div
           v-for="(collective, index) in collectives"
           :key="index"
+          @click="getModal(collective)"
           class=" card-cont col-md-4"
         >
           <card class="border-0" hover shadow body-classes="py-3">
@@ -33,6 +34,16 @@
             </div>
           </card>
         </div>
+        <modal :show.sync="modals.modal0.show">
+          <h5 class="modal-title" id="exampleModalLabel">
+            {{ modals.modal0.title }}
+          </h5>
+          <P class="description mt-1">{{ modals.modal0.notes }}</P>
+          <P class="description mt-1">{{ modals.modal0.summary }}</P>
+          <base-button type="primary" @click="joinCollective">
+            Join this Collective
+          </base-button>
+        </modal>
       </div>
     </div>
   </div>
@@ -40,12 +51,32 @@
 
 <script>
 import CollectiveService from "@/services/CollectiveService";
+import UserService from "@/services/UserService";
+import Modal from "@/components/Modal";
+import BaseButton from "@/components/BaseButton";
 export default {
   name: "search",
-  components: {},
+  components: {
+    Modal,
+    BaseButton
+  },
+  computed: {
+    user () {
+      return this.$store.state.user
+    }
+  },
   data() {
     return {
-      collectives: []
+      collectives: [],
+      modals: {
+        modal0: {
+          show: false,
+          id: "",
+          title: "",
+          notes: "",
+          summary: ""
+        }
+      }
     };
   },
   mounted() {
@@ -55,6 +86,25 @@ export default {
     async getCollectives() {
       const response = await CollectiveService.fetchCollectives();
       this.collectives = response.data.collectives;
+    },
+    getModal(collective) {
+      console.log(collective);
+      this.modals.modal0.show = true;
+      this.modals.modal0.id = collective._id;
+      this.modals.modal0.title = collective.title;
+      this.modals.modal0.notes = collective.notes;
+      this.modals.modal0.summary = collective.summary;
+    },
+    async joinCollective() {
+      console.log(this.modals.modal0, 'modal')
+      await UserService.modifyUser({
+        email: this.user.email,
+        collective: this.modals.modal0.id
+      });
+      let user = { ...this.user, collective: this.modals.modal0.id };
+      this.$store.commit("updateUser", user);
+      this.modals.modal0.show= false;
+      this.$router.push({ name: "collective"});
     }
   }
 };

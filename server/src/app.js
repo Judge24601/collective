@@ -174,7 +174,7 @@ app.post("/collectives", (req, res) => {
     }
     res.send({
       success: true,
-      message: "Collective saved successfully!"
+      message: new_collective.id
     });
   });
 });
