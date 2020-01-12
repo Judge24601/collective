@@ -7,6 +7,7 @@ import Posts from "@/components/Posts.vue";
 import NewPost from "@/components/NewPost.vue";
 import EditPost from "@/components/EditPost.vue";
 import { authGuard } from "../auth/authGuard";
+import Checkout from "@/components/Checkout.vue";
 
 Vue.use(VueRouter);
 
@@ -41,6 +42,11 @@ const routes = [
     path: "/posts/:id",
     name: "EditPost",
     component: EditPost
+  },
+  {
+    path: "/checkout",
+    name: "Checkout",
+    component: Checkout
   },
   {
     path: "/about",

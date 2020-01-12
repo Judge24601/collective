@@ -1,3 +1,4 @@
+<script src="https://js.stripe.com/v3/"></script>
 <template>
   <div id="app" class="bg-gradient-default">
     <div v-if="$route.name !== 'landing'" id="nav" style="position: fixed">
@@ -56,6 +57,19 @@ export default {
     }
   }
 </script>
+  }
+};
+
+<script>
+export default {
+  mounted() {
+    // let stripeScript = document.createElement("script");
+    // stripeScript.setAttribute("src", "https://js.stripe.com/v3/");
+    // document.head.appendChild(stripeScript);
+  }
+};
+</script>
+
 <style>
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
@@ -68,7 +82,7 @@ export default {
 }
 #nav {
   width: 100%;
-  z-index: 5;
+  z-index: -1;
   margin-top:-0.5rem;
   
 }
