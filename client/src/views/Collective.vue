@@ -21,7 +21,9 @@
           <div>
               <div class="card-cont"> 
                 <card class="border-0" hover shadow body-classes="py-3">
-                  <h3 class="text-primary text-uppercase">Poll</h3>
+                  <h3 class="text-primary text-uppercase">{{collective.title}}</h3>
+                  <h5 class="text-primary">{{collective.summary}}</h5>
+                  <p class="text-primary">{{collective.notes}}</p>
                   <div class="card-inner-poll">
                     <div v-if="!voted" class="vote-options-container">
                       <div v-for="(option, index) in chartOptions.labels" :key="index" class="vote-option">
@@ -147,7 +149,9 @@ export default {
       pollVotes: [],
       radioSelected: -1,
       socketId: '',
-
+      collectiveTitle: '',
+      collectiveSummary: '',
+      collectiveDescription: '',
 
       series: [44, 55, 13, 43, 22],
       chartOptions: {
