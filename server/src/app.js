@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
+let Pusher = require("pusher");
+require("dotenv").config();
 
 var Post = require("../models/post");
 var Collective = require("../models/collective");
@@ -56,6 +58,20 @@ app.put("/user/:email", (req, res) => {
     message: "user updated!"
   });
 });
+
+app.put("/user/:email/voted", (req, res) => {
+  UserModel.findOne({email: req.params.email}, "", function(error, user) {
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    user.voted = req.body.voted;
+    user.save();
+  })
+
+  res.send({success: true, message: "User updated!"});
+})
 
 app.post("/users", async (req,res) => {
   console.log("Hi again");
@@ -153,6 +169,17 @@ app.get("/posts/:collectiveId", (req, res) => {
   }).sort({ _id: -1 });
 });
 
+// Fetch collective data for collective ID
+app.get("/collectives/:collectiveId", (req, res) => {
+  CollectiveModel.findById(req.params.collectiveId, "", function(error, collective) {
+    if (error) {
+      res.send('Error');
+    }
+
+    res.send(collective);
+  });
+});
+
 // Add new collective
 app.post("/collectives", (req, res) => {
   var title = req.body.title;
@@ -196,6 +223,7 @@ app.get("/collectives", (req, res) => {
 app.post("/collectives/:collectiveId", (req, res) => {
   var pollOption = req.body.pollOption;
   var collectiveId = req.params.collectiveId
+  console.log(req.body);
   //CollectiveModel.findByIdAndUpdate(collectiveId, {$push: {pollChoices: {values: pollOption, votes: 0}}});
   console.log("Poll option: " + pollOption + " collectiveId: " + collectiveId);
 
@@ -211,6 +239,34 @@ app.post("/collectives/:collectiveId", (req, res) => {
     success: true,
     message: "Added poll option"
   })
+});
+
+// Increment poll option
+app.post("/collectives/:collectiveId/vote", (req, res) => {
+  const choice = req.body.choice;
+  console.log('here');
+  CollectiveModel.findById(req.params.collectiveId, function(error, collective) {
+    console.log('Found collective: ' + collective.title + ' votes: ' + collective.pollChoices[0].votes + " choice: " + choice);
+    collective.pollChoices[choice].votes++;
+    collective.save();
+
+    let pusher = new Pusher({
+      appId: process.env.app_id,
+      key: process.env.key,
+      secret: process.env.secret,
+      cluster: process.env.cluster
+    });
+
+    let payload = { collectiveId: req.params.collectiveId, choice: choice };
+    pusher.trigger( req.params.collectiveId, 'vote', payload, req.body.socketId)
+
+    res.send('Success');
+  });
+
+  /*
+  CollectiveModel.update({_id: req.params.collectiveId}, {$inc: {[identifier]: 1}}, {}, (err, numberAffected) => {
+      res.send('Success');
+  });*/
 });
 
 // Untested endpoints

@@ -10,4 +10,10 @@ export default {
   modifyUser(params) {
     return Api().put("user/" + params.email, params);
   },
+  updateUserVote(email, voted, socketId) {
+    return Api().put("user/" + email + "/voted", {
+      voted: voted,
+      socketId: socketId
+    })
+  }
 };
