@@ -4,7 +4,7 @@
     <div v-if="$route.name !== 'landing'" id="nav" style="position: fixed">
       <div style="position: relative">
         <base-nav type="default" effect="dark" expand>
-            <h4 class="navbar-brand">collective</h4>
+            <h4 class="navbar-brand" @click="home">collective</h4>
 
             <div class="row" slot="content-header" slot-scope="{closeMenu}">
                 <div class="col-6 collapse-brand">
@@ -97,6 +97,9 @@ export default {
     },
     methods: {
       // Log the user in
+      home () {
+        this.$router.push({ name: "collective" });
+      },
       login() { 
         this.$auth.loginWithRedirect();
         this.getUser()
