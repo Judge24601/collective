@@ -28,6 +28,35 @@ var CollectiveModel = collectiveConnection.model('Collectives', Collective);
 var UserModel = userConnection.model('Users', User);
 // This creates a new Customer and attaches the PaymentMethod in one API call.
 
+// Fetch single user
+app.get("/user/:email", (req, res) => {
+  console.log("get user", req)
+  var db = req.db;
+  UserModel.findOne({email: req.params.email}, "", function(error, user) {
+    if (error) {
+      console.error(error);
+    }
+    res.send(user);
+  })
+});
+
+app.put("/user/:email", (req, res) => {
+  var db = req.db;
+  console.log(req.params)
+  UserModel.findOne({email: req.params.email}, "", function(error, user) {
+    if (error) {
+      console.error(error);
+    }
+    console.log('yis', user)
+    user.collective = req.body.collective
+    user.save()
+  })
+  res.send({
+    success: true,
+    message: "user updated!"
+  });
+});
+
 app.post("/users", async (req,res) => {
   console.log("Hi again");
   var db = req.db;

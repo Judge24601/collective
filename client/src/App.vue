@@ -32,13 +32,13 @@
     </div>
     <modal :show.sync="authenticatedNotCreated">
       <template slot="header">
-          <h5 class="modal-title" id="exampleModalLabel">New Post</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Set up Subscription</h5>
       </template>
-      <checkout></checkout>
-      <template slot="footer">
+      <checkout @exit="closeModal"></checkout>
+      <!-- <template slot="footer">
           <base-button type="secondary" @click="modals.modal0 = false">Close</base-button>
           <base-button type="primary" >Save</base-button>
-      </template>
+      </template> -->
     </modal>
     <router-view />
   </div>
@@ -59,12 +59,22 @@ export default {
       Modal,
       Checkout,
     },
+    data () {
+      return {
+        openModal: true
+      };
+    },
     ...mapMutations([
       'updateUser', // map `this.increment()` to `this.$store.commit('increment')`
     ]),
+    computed: {
+    user () {
+      return this.$store.state.user
+    }
+  },
     asyncComputed: {
       authenticatedNotCreated: async function () {
-        if (this.$store.state.user != undefined) {
+        if (!this.openModal) {
           return false
         }
         console.log("auth!", this.$auth.user)
@@ -73,7 +83,12 @@ export default {
           let user = await UserService.getUser(email)
           console.log(user)
           this.$store.commit('updateUser', user.data)
-          return (this.$store.state.user.customerId != false)
+          console.log(this.user == "")
+          if (this.user == "") {
+            console.log('should be showing')
+            return true
+          }
+          return (this.user.customerId == undefined)
         }
         return false
       }
@@ -89,6 +104,10 @@ export default {
         this.$auth.logout({
           returnTo: window.location.origin
         });
+      },
+      closeModal () {
+        console.log('close modal')
+        this.openModal = false
       }
     }
   }
