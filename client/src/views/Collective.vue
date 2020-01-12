@@ -88,7 +88,8 @@ import TabPane from "@/components/Tabs/TabPane";
 import Modal from "@/components/Modal";
 import PostsService from "@/services/PostsService";
 import CollectiveService from "@/services/CollectiveService";
-import { getInstance } from "@/auth/index";
+import UserService from "@/services/UserService";
+//import { getInstance } from "@/auth/index";
 export default {
   name: "collective",
   components: {
@@ -135,6 +136,10 @@ export default {
     async vote() {
       if (this.radioSelected >= 0) {
         await CollectiveService.postVote("5e1aa961c9b1c6285c451bf8", this.radioSelected);
+        await UserService.updateUserVote(this.user.email, true);
+        let user = {...this.user, voted: true};
+        this.$store.commit('updateUser', user);
+        this.voted = true;
       }
     },
     async getPosts() {
