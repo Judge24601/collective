@@ -14,24 +14,24 @@
             ></span>
           </div>
         </div>
-        <div class="row">
-          <h2 class="white-color">Popular Collectives</h2>
-        </div>
-        <div class="row">
-          <div
-            v-for="(collective, index) in collectives"
-            :key="index"
-            class=" card-cont col-md-4"
-          >
-            <card class="border-0" hover shadow body-classes="py-3">
-              <h3 class="text-primary text-uppercase">
-                {{ collective.title }}
-              </h3>
-              <div class="card-inner">
-                <P class="description mt-1">{{ collective.notes }}</P>
-              </div>
-            </card>
-          </div>
+      </div>
+      <div class="row">
+        <h2 class="white-color">Popular Collectives</h2>
+      </div>
+      <div class="row">
+        <div
+          v-for="(collective, index) in collectives"
+          :key="index"
+          class=" card-cont col-md-4"
+        >
+          <card class="border-0" hover shadow body-classes="py-3">
+            <h3 class="text-primary text-uppercase">
+              {{ collective.title }}
+            </h3>
+            <div class="card-inner">
+              <P class="description mt-1">{{ collective.notes }}</P>
+            </div>
+          </card>
         </div>
       </div>
     </div>
