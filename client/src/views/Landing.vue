@@ -4,7 +4,6 @@
         <div class="position-relative">
             <!-- shape Hero -->
             <section class="section-shaped my-0">
-                
                 <div class="shape shape-style-1 shape-default shape-skew">
                     <span></span>
                     <span></span>
@@ -506,17 +505,5 @@
 export default {
   name: "home",
   components: {},
-   methods: {
-    // Log the user in
-    login() {
-      this.$auth.loginWithRedirect();
-    },
-    // Log the user out
-    logout() {
-      this.$auth.logout({
-        returnTo: window.location.origin
-      });
-    }
-   }
 };
 </script>
