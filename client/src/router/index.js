@@ -1,19 +1,25 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Landing from "../views/Landing.vue";
+import Collective from "../views/Collective.vue";
 import Login from "../views/Login.vue";
 import Posts from "@/components/Posts.vue";
 import NewPost from "@/components/NewPost.vue";
 import EditPost from "@/components/EditPost.vue";
-import Header from "@/layout/starter/StarterHeader";
+import { authGuard } from "../auth/authGuard";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
+    name: "collective",
+    component: Collective,
+    beforeEnter: authGuard,
+  },
+  {
+    path: "/landing",
     name: "landing",
-    header: Header,
     component: Landing
   },
   {
