@@ -99,6 +99,9 @@ export default {
   },
   methods: {
     async getPosts() {
+      if (!this.user || !this.user.collective) {
+        return
+      }
       const response = await PostsService.fetchPosts(this.user);
       this.posts = response.data.posts;
     },
