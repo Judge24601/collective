@@ -9,7 +9,7 @@
           <modal :show.sync="modals.modal0">
             <template slot="header">
               <h5 class="modal-title" id="exampleModalLabel">
-                Found a Collective
+                Create a Collective
               </h5>
             </template>
             <form>
@@ -47,7 +47,7 @@
             icon="fa fa-gavel"
             class="landing-b"
             @click="modals.modal0 = true"
-            >Found Collective</base-button
+            >Create Collective</base-button
           >
           <base-button
             size="lg"
