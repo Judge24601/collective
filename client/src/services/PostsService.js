@@ -1,8 +1,8 @@
 import Api from "@/services/Api";
 
 export default {
-  fetchPosts() {
-    return Api().get("posts");
+  fetchPosts(params) {
+    return Api().get("posts/" + params.collective);
   },
   addPost(params) {
     return Api().post("posts", params);

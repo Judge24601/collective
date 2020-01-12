@@ -28,6 +28,35 @@ var CollectiveModel = collectiveConnection.model('Collectives', Collective);
 var UserModel = userConnection.model('Users', User);
 // This creates a new Customer and attaches the PaymentMethod in one API call.
 
+// Fetch single user
+app.get("/user/:email", (req, res) => {
+  console.log("get user", req)
+  var db = req.db;
+  UserModel.findOne({email: req.params.email}, "", function(error, user) {
+    if (error) {
+      console.error(error);
+    }
+    res.send(user);
+  })
+});
+
+app.put("/user/:email", (req, res) => {
+  var db = req.db;
+  console.log(req.params)
+  UserModel.findOne({email: req.params.email}, "", function(error, user) {
+    if (error) {
+      console.error(error);
+    }
+    console.log('yis', user)
+    user.collective = req.body.collective
+    user.save()
+  })
+  res.send({
+    success: true,
+    message: "user updated!"
+  });
+});
+
 app.post("/users", async (req,res) => {
   console.log("Hi again");
   var db = req.db;
@@ -70,20 +99,6 @@ app.post("/users", async (req,res) => {
   });
 });
 
-// This creates a new Customer and attaches the PaymentMethod in one API call.
-const customer = await stripe.customers.create({
-  payment_method: 'pm_1FU2bgBF6ERF9jhEQvwnA7sX',
-  email: 'jenny.rosen@example.com',
-  invoice_settings: {
-    default_payment_method: 'pm_1FU2bgBF6ERF9jhEQvwnA7sX',
-  },
-});
-
-const subscription = await stripe.subscriptions.create({
-  customer: "cus_G02hIo15n8CU1s",
-  items: [{ plan: "plan_FSDjyHWis0QVwl" }],
-  expand: ["latest_invoice.payment_intent"]
-});
 
 // Add new post
 app.post("/posts", (req, res) => {
@@ -159,7 +174,7 @@ app.post("/collectives", (req, res) => {
     }
     res.send({
       success: true,
-      message: "Post saved successfully!"
+      message: new_collective.id
     });
   });
 });
