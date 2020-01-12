@@ -41,6 +41,7 @@ export default {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
+            name: "name",  
             email: "jenny.rosen@example.com",
             payment_method: "pm_1FU2bgBF6ERF9jhEQvwnA7sX"
           })

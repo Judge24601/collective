@@ -26,18 +26,33 @@ db.once("open", function(callback) {
 });
 
 // This creates a new Customer and attaches the PaymentMethod in one API call.
-const customer = await stripe.customers.create({
-  payment_method: 'pm_1FU2bgBF6ERF9jhEQvwnA7sX',
-  email: 'jenny.rosen@example.com',
-  invoice_settings: {
-    default_payment_method: 'pm_1FU2bgBF6ERF9jhEQvwnA7sX',
-  },
-});
 
-const subscription = await stripe.subscriptions.create({
-  customer: "cus_G02hIo15n8CU1s",
-  items: [{ plan: "plan_FSDjyHWis0QVwl" }],
-  expand: ["latest_invoice.payment_intent"]
+
+
+
+app.post("/create-customer", (req,res) => {
+  var db = req.db;
+  var email = req.body.email;
+  var payment_method = req.body.payment_method;
+  var name = req.body.name;
+
+  const customer = await stripe.customers.create({
+    payment_method: payment_method,
+    email: email,
+    invoice_settings: {
+      default_payment_method: payment_method,
+    },
+  });
+
+  const subscription = await stripe.subscriptions.create({
+    customer: customer.id,
+    items: [{ plan: "plan_FSDjyHWis0QVwl" }],
+    expand: ["latest_invoice.payment_intent"]
+  });
+
+
+
+
 });
 
 // Add new post
