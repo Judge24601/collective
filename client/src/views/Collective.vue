@@ -48,7 +48,18 @@
                           <base-button type="primary" @click="addPost">Save</base-button>
                       </template>
                   </modal>
-
+                  <modal :show.sync="modals.modal1">
+                    <template slot="header">
+                      <h5 class="modal-title" id="exampleModalLabel">Create New Poll Option</h5>
+                    </template>
+                    <form>
+                      <base-input alternative v-model="new_poll_option" placeholder="Enter option here"></base-input>
+                    </form>
+                    <template slot="footer">
+                        <base-button type="secondary" @click="modals.modal1 = false">Close</base-button>
+                        <base-button type="primary" @click="addPollOption">Create</base-button>
+                    </template>
+                  </modal>
               </div>
               <div v-for="(post, index) in posts" :key="index" class="card-cont">
                   <card class="border-0" hover shadow body-classes="py-3">
@@ -152,7 +163,7 @@ export default {
     /*pusher.connection.bind('connected', data => {
       this.socketId = pusher.connection.socket_id;
     });*/
-    pusher.subscribe("5e1aa961c9b1c6285c451bf8");
+    pusher.subscribe(this.user.collective);
     pusher.bind('vote', data => {
         //var co = data.pollId;
         var choice = data.choice;
@@ -190,7 +201,7 @@ export default {
   methods: {
     async vote() {
       if (this.radioSelected >= 0) {
-        await CollectiveService.postVote("5e1aa961c9b1c6285c451bf8", this.radioSelected, this.socketId);
+        await CollectiveService.postVote(this.user.collective, this.radioSelected, this.socketId);
         await UserService.updateUserVote(this.user.email, true);
         let user = {...this.user, voted: true};
         this.$store.commit('updateUser', user);
@@ -234,9 +245,12 @@ export default {
       }
     },
     async getPollOptions() {
-      const response = await CollectiveService.fetchCollective("5e1aa961c9b1c6285c451bf8");
-      this.chartOptions.labels = response.data.pollChoices.map(ans => ans.value);
-      this.pollVotes = response.data.pollChoices.map(ans => ans.votes);
+      const response = await CollectiveService.fetchCollective(this.user.collective);
+      if (response.data.pollChoices != null && response.data.pollChoices.length > 0) {
+        this.chartOptions.labels = response.data.pollChoices.map(ans => ans.value);
+        this.pollVotes = response.data.pollChoices.map(ans => ans.votes);
+      }
+
       this.voted = this.user.voted;
     },
     async deletePost(id) {
@@ -257,7 +271,7 @@ export default {
         return;
       }
 
-      await CollectiveService.postNewPollOption("5e1aa961c9b1c6285c451bf8", this.new_poll_option);
+      await CollectiveService.postNewPollOption(this.user.collective, this.new_poll_option);
       this.modals.modal1 = false;
       this.getPollOptions();
     }
