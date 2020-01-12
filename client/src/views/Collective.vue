@@ -202,6 +202,9 @@ export default {
       this.$refs.votesChart.updateSeries(this.pollVotes);
     },
     async getPosts() {
+      if (!this.user || !this.user.collective) {
+        return
+      }
       const response = await PostsService.fetchPosts(this.user);
       this.posts = response.data.posts;
     },
