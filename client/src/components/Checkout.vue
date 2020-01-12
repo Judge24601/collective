@@ -1,8 +1,9 @@
 <template>
-  <div>
+  <div class="container">
     <!-- Use the CSS tab above to style your Element's container. -->
     <div id="card-element" class="MyCardElement">
       <!-- Elements will create input elements here -->
+      <p>hi</p>
     </div>
 
     <!-- We'll put the error messages in this element -->
@@ -13,7 +14,7 @@
 <script src="https://js.stripe.com/v3/"></script>
 
 <script>
-import UserService from "@/services/PostsService";
+import UserService from "@/services/UserService";
 let stripe = Stripe("pk_test_mCaKNqWh4ybhZDzoJ6WiMk9d00bgu8VK6V");
 let elements = stripe.elements();
 let cardElement = elements.create("card", style);
@@ -27,20 +28,20 @@ export default {
   },
   methods: {
     async purchase() {
+        console.log(this.$auth);
       const { paymentMethod, error } = await stripe.createPaymentMethod({
         type: "card",
         card: cardElement,
         billing_details: {
-          email: "jenny.rosen@example.com"
+          email: this.$auth.user.email
         }
       });
       try {
         console.log("HI");
-        const response = await UserService.addPost({
-
-          name: "name",
-          email: "jenny.rosen@example.com",
-          payment_method: "pm_1FU2bgBF6ERF9jhEQvwnA7sX"
+        const response = await UserService.addUser({
+          name: this.$auth.user.name,
+          email: this.$auth.user.email,
+          payment_method: paymentMethod
         });
         this.$router.push({ name: "collective" });
         const customer = response.json();
@@ -84,7 +85,7 @@ export default {
 
 let style = {
   base: {
-    color: "#32325d",
+    color: "#ffffff",
     fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
     fontSmoothing: "antialiased",
     fontSize: "16px",

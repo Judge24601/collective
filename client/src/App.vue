@@ -72,7 +72,7 @@ export default {
 }
 #nav {
   width: 100%;
-  z-index: 5;
+  z-index: -1;
   margin-top:-0.5rem;
   
 }
