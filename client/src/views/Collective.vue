@@ -64,7 +64,6 @@ import Tabs from "@/components/Tabs/Tabs";
 import TabPane from "@/components/Tabs/TabPane";
 import Modal from "@/components/Modal";
 import PostsService from "@/services/PostsService";
-import { getInstance } from "@/auth/index";
 export default {
   name: "collective",
   components: {
@@ -83,17 +82,22 @@ export default {
     };
   },
   mounted() {
-    //this.redirect();
     this.getPosts();
   },
-  methods: {
-    async redirect () {
-      let auth = getInstance()
-      await !auth.loading;
-      if (!auth.isAuthenticated) {
+  computed: {
+    user () {
+      return this.$store.state.user
+    }
+  },
+  watch: {
+    user () {
+      console.log("test", this.user)
+      if (this.user && this.user.collective == undefined){
         this.$router.push({ name: "landing" });
       }
-    },
+    }
+  },
+  methods: {
     async getPosts() {
       const response = await PostsService.fetchPosts();
       this.posts = response.data.posts;
