@@ -3,9 +3,9 @@
         <div class="position-relative">
             <!-- shape Hero -->
             <section class="section-shaped my-1">
-                <div class="shape shape-style-0 shape-default shape-skew">
+                <div class="shape shape-style-1 bg-gradient-default shape-skew">
                 </div>
-                <div class="container shape-container mt--200">
+                <div class="container">
                     <div>
                         <base-button type="success" @click="modals.modal0 = true">
                             New Post
@@ -16,7 +16,7 @@
                             </template>
                             <form>
                                 <base-input alternative v-model="new_title"></base-input>
-                                <textarea  v-model="new_description" alternative rows="3" placeholder="Write a large text here ..."></textarea>
+                                <textarea v-model="new_description" class="form-control form-control-alternative" rows="3" placeholder="Write a large text here ..."></textarea>
                             </form>
                             <template slot="footer">
                                 <base-button type="secondary" @click="modals.modal0 = false">Close</base-button>
@@ -26,20 +26,29 @@
 
                     </div>
                     <div v-for="(post, index) in posts" :key="index" class="card-cont">
-                        <card class="border-0" hover shadow body-classes="py-5">
-                            <h4 class="text-primary text-uppercase">{{ post.title }}</h4>
-                            <p class="description mt-3">{{ post.description }}</p>
-                            <tabs :fill="false" circle>
-                                <tab-pane title="Hide">
-                                        <span slot="title" class="nav-link-icon d-block"><i class="ni ni-fat-delete"></i></span>
-                                </tab-pane>
-                                <tab-pane title="Replies">
-                                        <span slot="title" class="nav-link-icon d-block"><i class="ni ni-chat-round"></i></span>
-                                </tab-pane>
-                                <tab-pane title="Share">
-                                    <span slot="title" class="nav-link-icon d-block"><i class="fa fa-share-alt" aria-hidden="true"></i></span>
-                                </tab-pane>
-                            </tabs>
+                        <card class="border-0" hover shadow body-classes="py-3">
+                            <h3 class="text-primary text-uppercase">{{ post.title }}</h3>
+                            <div class="card-inner">
+                                <div class="voting">
+                                    <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                    <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+                                </div>
+                                <div class="content">
+                                    
+                                    <P class="description mt-1">{{ post.description }}</p>
+                                    <tabs :fill="false" circle>
+                                        <tab-pane title="Hide">
+                                                <span slot="title" class="nav-link-icon d-block"><i class="ni ni-fat-delete"></i></span>
+                                        </tab-pane>
+                                        <tab-pane title="Replies">
+                                                <span slot="title" class="nav-link-icon d-block"><i class="ni ni-chat-round"></i></span>
+                                        </tab-pane>
+                                        <tab-pane title="Share">
+                                            <span slot="title" class="nav-link-icon d-block"><i class="fa fa-share-alt" aria-hidden="true"></i></span>
+                                        </tab-pane>
+                                    </tabs>
+                                </div>
+                            </div>
                         </card>
                     </div>
                 </div>

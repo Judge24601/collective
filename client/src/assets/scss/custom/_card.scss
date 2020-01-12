@@ -6,6 +6,35 @@
     padding-top: 1.7rem;
 }
 
+.card-inner{
+    display: flex;
+    .voting {
+        width: 15%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        i {
+            padding-bottom: 0.8rem;
+            font-size: 2.5rem;
+            color: #8898aa;
+            
+        }
+        .fa-thumbs-up {
+            &:hover {
+                color: $success;
+            }
+        }
+        .fa-thumbs-down {
+            &:hover {
+                color: $danger  ;
+            }
+        }
+    }
+    .content {
+        width: 85%;
+    }
+}
+
 .profile-page {
     .card-profile {
         margin-top: -150px;
@@ -47,7 +76,7 @@
                     display: block;
                 }
                 .description {
-                    font-size: .875rem;
+                    font-size: 1rem;
                     color: $gray-500;
                 }
             }
