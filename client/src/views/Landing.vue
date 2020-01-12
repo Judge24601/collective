@@ -111,7 +111,8 @@ export default {
       let res = await CollectiveService.addCollective({
         notes: this.notes,
         summary: this.summary,
-        title: this.title
+        title: this.title,
+        userCharge: this.user.monthlyCharge
       });
       console.log("added", this.user);
       let id = res.data.message;
@@ -127,7 +128,7 @@ export default {
     },
     search() {
       this.$router.push({ name: "Search" });
-    }
+    },
   }
 };
 </script>

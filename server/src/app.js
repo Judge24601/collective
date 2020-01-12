@@ -94,13 +94,15 @@ app.post("/users", async (req,res) => {
   const subscription = await stripe.subscriptions.create({
     customer: customerId,
     items: [{ plan: "plan_GX4AB0oH5nLgdc" }],
-    expand: ["latest_invoice.payment_intent"]
+    expand: ["latest_invoice.payment_intent"],
   });
+  var monthlyCharge = subscription.items.plan.amount / 100; 
   console.log("past sub")
   var user = new UserModel({
     name: name,
     email: email,
     customerId: customerId,
+    monthlyCharge: monthlyCharge,
     voted: false,
   });
 
@@ -185,16 +187,18 @@ app.post("/collectives", (req, res) => {
   var title = req.body.title;
   var summary = req.body.summary;
   var notes = req.body.notes;
+  var newCharge = req.body.monthlyCharge;
   var new_collective = new CollectiveModel({
     title: title,
     summary: summary,
     notes: notes,
+    totalAmount: newCharge,
     poll: { choices: [] }, 
     posts: [],
     users: []
     //replies: [{id: "abc123"}]
   });
-
+  console.log(totalAmount)
   new_collective.save(function(error) {
     if (error) {
       console.log(error);
@@ -218,6 +222,42 @@ app.get("/collectives", (req, res) => {
     });
   }).sort({_id: -1});
 });
+
+// Fetch one collective 
+app.get("/collective/:id", (req,res) =>{
+  var db = req.db;
+  CollectiveModel.findById(req.params.id, "", function(error, post) {
+    if (error) {
+      console.error(error);
+    }
+    res.send(collective);
+  });
+});
+
+// Update a collective
+
+app.put("/collective/:id", (req,res) => {
+  var db = req.db;
+  Collective.findById(req.params.id, "title summary notes totalAmount", function(error, post) {
+    if (error) {
+      console.error(error);
+    }
+
+    collective.title = req.body.title;
+    collective.summary = req.body.summary;
+    collective.notes = req.body.notes;
+    collective.totalAmount = req.body.totalAmount + collective.totalAmount;
+    post.save(function(error) {
+      if (error) {
+        console.log(error);
+      }
+      res.send({
+        success: true
+      });
+    });
+  });
+
+})
 
 // Post new poll option
 app.post("/collectives/:collectiveId", (req, res) => {
@@ -302,6 +342,9 @@ app.put("/posts/:id", (req, res) => {
     });
   });
 });
+
+
+
 
 // Delete a post
 app.delete("/posts/:id", (req, res) => {

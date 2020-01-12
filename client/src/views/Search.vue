@@ -111,6 +111,10 @@ export default {
         email: this.user.email,
         collective: this.modals.modal0.id
       });
+
+      await CollectiveService.updateCollective({
+        totalAmount: this.user.collective.monthlyCharge
+      });
       let user = { ...this.user, collective: this.modals.modal0.id };
       this.$store.commit("updateUser", user);
       this.modals.modal0.show= false;

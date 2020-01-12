@@ -20,5 +20,8 @@ export default {
     return Api().post("collectives/" + collectiveId + "/vote", {
         choice: choice
     })
-  }
+  },
+  updateCollective(params) {
+    return Api().put("collective/" + params.id, params);
+  },
 };
