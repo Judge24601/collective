@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
+let Pusher = require("pusher");
+require("dotenv").config();
 
 var Post = require("../models/post");
 var Collective = require("../models/collective");
@@ -247,6 +249,17 @@ app.post("/collectives/:collectiveId/vote", (req, res) => {
     console.log('Found collective: ' + collective.title + ' votes: ' + collective.pollChoices[0].votes + " choice: " + choice);
     collective.pollChoices[choice].votes++;
     collective.save();
+
+    let pusher = new Pusher({
+      appId: process.env.app_id,
+      key: process.env.key,
+      secret: process.env.secret,
+      cluster: process.env.cluster
+    });
+
+    let payload = { collectiveId: req.params.collectiveId, choice: choice };
+    pusher.trigger( req.params.collectiveId, 'vote', payload, req.body.socketId)
+
     res.send('Success');
   });
 

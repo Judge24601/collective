@@ -25,7 +25,8 @@
                       </div>
                     </div>
                     <div v-if="voted" class="pie-chart-container">
-                      <apexchart type="pie" width="380" :options="chartOptions" :series="pollVotes"></apexchart>
+                      <apexchart ref="votesChart" type="pie" width="380" :options="chartOptions" :series="pollVotes"></apexchart>
+                      <base-button type="success" @click="tempTest">Temp test</base-button>
                     </div>
                   </div>
                 </card>
@@ -89,8 +90,11 @@ import Modal from "@/components/Modal";
 import PostsService from "@/services/PostsService";
 import CollectiveService from "@/services/CollectiveService";
 import UserService from "@/services/UserService";
-import VueApexCharts from 'vue-apexcharts'
+import VueApexCharts from 'vue-apexcharts';
+import Pusher from 'pusher-js';
 //import { getInstance } from "@/auth/index";
+
+var pusher;
 
 export default {
   name: "collective",
@@ -116,6 +120,8 @@ export default {
       pollOptions: [],
       pollVotes: [],
       radioSelected: -1,
+      socketId: '',
+
 
       series: [44, 55, 13, 43, 22],
       chartOptions: {
@@ -139,6 +145,30 @@ export default {
       },
     };
   },
+  created() {
+    console.log(process.env.VUE_APP_KEY);
+    console.log(process.env.VUE_APP_CLUSTER);
+    pusher = new Pusher(process.env.VUE_APP_KEY, { cluster: process.env.VUE_APP_CLUSTER });
+    /*pusher.connection.bind('connected', data => {
+      this.socketId = pusher.connection.socket_id;
+    });*/
+    pusher.subscribe("5e1aa961c9b1c6285c451bf8");
+    pusher.bind('vote', data => {
+        //var co = data.pollId;
+        var choice = data.choice;
+        console.log('sub sent vals');
+        this.pollVotes[choice]++;
+        this.$refs.votesChart.updateSeries(this.pollVotes);
+        /*voteCount = document.querySelector('#vote-count-' + pollId + '-' + choice);
+        voteCount.textContent++;
+        // we'll flash the colour for a moment
+        var color = voteCount.style.color;
+        setTimeout(function () {
+            voteCount.style.color = color;
+        }, 2000);
+        voteCount.style.color = 'green';*/
+    });
+  },
   mounted() {
     this.getPosts();
     this.getPollOptions();
@@ -160,13 +190,16 @@ export default {
   methods: {
     async vote() {
       if (this.radioSelected >= 0) {
-        await CollectiveService.postVote("5e1aa961c9b1c6285c451bf8", this.radioSelected);
-        await this.getPollOptions();
+        await CollectiveService.postVote("5e1aa961c9b1c6285c451bf8", this.radioSelected, this.socketId);
         await UserService.updateUserVote(this.user.email, true);
         let user = {...this.user, voted: true};
         this.$store.commit('updateUser', user);
         this.voted = true;
       }
+    },
+    async tempTest() {
+      this.pollVotes[0]++;
+      this.$refs.votesChart.updateSeries(this.pollVotes);
     },
     async getPosts() {
       const response = await PostsService.fetchPosts(this.user);
