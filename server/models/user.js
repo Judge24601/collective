@@ -6,6 +6,7 @@ var UserSchema = new Schema({
     email: String,
     customerId: String,
     collective: String,
+    monthlyCharge: Number,
     voted: Boolean,
     posts: [
         {

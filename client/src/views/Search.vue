@@ -106,10 +106,17 @@ export default {
       this.modals.modal0.summary = collective.summary;
     },
     async joinCollective() {
+      console.log("Heil???o")
       console.log(this.modals.modal0, 'modal')
       await UserService.modifyUser({
         email: this.user.email,
         collective: this.modals.modal0.id
+      });
+      console.log("Heilo")
+      console.log(this.user);
+      await CollectiveService.updateCollective({
+        id: this.modals.modal0.id,
+        totalAmount: this.user.monthlyCharge
       });
       let user = { ...this.user, collective: this.modals.modal0.id };
       this.$store.commit("updateUser", user);

@@ -5,6 +5,7 @@ var CollectiveSchema = new Schema({
     title: String,
     summary: String,
     notes: String,
+    totalAmount: Number,
     pollChoices: [
         {
             value: String,
