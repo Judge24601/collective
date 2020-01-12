@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
+    <h3>collective</h3>
     <div v-if="!$auth.loading">
           <!-- show login when not authenticated -->
           <base-button v-if="!$auth.isAuthenticated" @click="login">Log in</base-button>

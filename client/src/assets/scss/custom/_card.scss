@@ -2,6 +2,10 @@
     position: relative;
 }
 
+.card-cont{
+    padding-top: 1.7rem;
+}
+
 .profile-page {
     .card-profile {
         margin-top: -150px;
@@ -89,7 +93,7 @@
 
 .card-lift--hover {
     &:hover {
-        transform: translateY(-20px);
+        transform: translateY(-15px);
         @include transition($transition-base);
     }
 }
