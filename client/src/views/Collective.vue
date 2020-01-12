@@ -11,9 +11,9 @@
                         <h3 class="text-primary text-uppercase">Poll</h3>
                         <div class="card-inner-poll">
                           <div v-if="!voted" class="vote-options-container">
-                            <div v-for="(option, index) in pollOptions" :key="index" class="vote-option">
+                            <div v-for="(option, index) in chartOptions.labels" :key="index" class="vote-option">
                               <base-radio :name="index" class="mb-3" v-model="radioSelected">
-                                {{option.value}}
+                                {{option}}
                               </base-radio>
                             </div>
                             <div class="vote-buttons-container">
@@ -26,7 +26,7 @@
                             </div>
                           </div>
                           <div v-if="voted" class="pie-chart-container">
-                            <h1>other test</h1>
+                            <apexchart type="pie" width="380" :options="chartOptions" :series="pollVotes"></apexchart>
                           </div>
                         </div>
                       </card>
@@ -101,13 +101,16 @@ import Modal from "@/components/Modal";
 import PostsService from "@/services/PostsService";
 import CollectiveService from "@/services/CollectiveService";
 import UserService from "@/services/UserService";
+import VueApexCharts from 'vue-apexcharts'
 //import { getInstance } from "@/auth/index";
+
 export default {
   name: "collective",
   components: {
     Tabs,
     TabPane,
-    Modal
+    Modal,
+    apexchart: VueApexCharts,
   },
   data() {
     return {
@@ -121,7 +124,29 @@ export default {
       new_description: "",
       voted: false,
       pollOptions: [],
-      radioSelected: -1
+      pollVotes: [],
+      radioSelected: -1,
+
+      series: [44, 55, 13, 43, 22],
+      chartOptions: {
+        chart: {
+          width: 380,
+          type: 'pie',
+        },
+        //labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
+        labels: [],
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200
+            },
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }]
+      },
     };
   },
   mounted() {
@@ -157,7 +182,8 @@ export default {
     },
     async getPollOptions() {
       const response = await CollectiveService.fetchCollective("5e1aa961c9b1c6285c451bf8");
-      this.pollOptions = response.data.pollChoices;
+      this.chartOptions.labels = response.data.pollChoices.map(ans => ans.value);
+      this.pollVotes = response.data.pollChoices.map(ans => ans.votes);
     },
     async deletePost(id) {
       await PostsService.deletePost(id);
@@ -209,6 +235,11 @@ export default {
     .add-option-button {
       justify-content: right;
       text-align: right;
+    }
+    .pie-chart-container {
+      display:flex;
+      justify-content: center;
+      text-align: left;
     }
 
 </style>
