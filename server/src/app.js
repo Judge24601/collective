@@ -3,7 +3,6 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
-const passport = require("passport");
 
 var Post = require("../models/post");
 var Collective = require("../models/collective");
@@ -27,15 +26,12 @@ db.once("open", function(callback) {
 
 // This creates a new Customer and attaches the PaymentMethod in one API call.
 
-
-
-
-app.post("/create-customer", (req,res) => {
+app.post("/user", async (req,res) => {
+  console.log("Hi");
   var db = req.db;
   var email = req.body.email;
   var payment_method = req.body.payment_method;
   var name = req.body.name;
-
   const customer = await stripe.customers.create({
     payment_method: payment_method,
     email: email,
@@ -43,16 +39,31 @@ app.post("/create-customer", (req,res) => {
       default_payment_method: payment_method,
     },
   });
+  
+  var customerId = customer.id;
 
   const subscription = await stripe.subscriptions.create({
-    customer: customer.id,
-    items: [{ plan: "plan_FSDjyHWis0QVwl" }],
+    customer: customerId,
+    items: [{ plan: "plan_GX4AB0oH5nLgdc" }],
     expand: ["latest_invoice.payment_intent"]
   });
 
+  var user = new UserModel({
+    name: name,
+    email: email,
+    customerId: customerId,
+    voted: false,
+  });
 
-
-
+  user.save(function(error){
+    if(error) {
+      console.log(error);
+    }
+    res.send({
+      success: true,
+      message: "New user created!"
+    });
+  });
 });
 
 // Add new post

@@ -13,10 +13,10 @@
 <script src="https://js.stripe.com/v3/"></script>
 
 <script>
+import UserService from "@/services/PostsService";
 let stripe = Stripe("pk_test_mCaKNqWh4ybhZDzoJ6WiMk9d00bgu8VK6V");
 let elements = stripe.elements();
 let cardElement = elements.create("card", style);
-
 
 export default {
   mounted: function() {
@@ -35,19 +35,36 @@ export default {
         }
       });
       try {
-        const response = await fetch("/create-customer", {
-          method: "post",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            name: "name",  
-            email: "jenny.rosen@example.com",
-            payment_method: "pm_1FU2bgBF6ERF9jhEQvwnA7sX"
-          })
+        console.log("HI");
+        const response = await UserService.addPost({
+
+          name: "name",
+          email: "jenny.rosen@example.com",
+          payment_method: "pm_1FU2bgBF6ERF9jhEQvwnA7sX"
         });
+        this.$router.push({ name: "user" });
         const customer = response.json();
         // The customer has been created
+
+        const { latest_invoice } = subscription;
+        const { payment_intent } = latest_invoice;
+
+        if (payment_intent) {
+          const { client_secret, status } = payment_intent;
+
+          if (status === "requires_action") {
+            stripe.confirmCardPayment(client_secret).then(function(result) {
+              if (result.error) {
+                console.log("NO");
+              } else {
+                console.log("All is well!");
+              }
+            });
+          } else {
+            // No additional information was needed
+            // Show a success message to your customer
+          }
+        }
       } catch (error) {
         // Handle error from server if customer wasn't created
       }
@@ -64,8 +81,6 @@ export default {
     }
   }
 };
-
-
 
 let style = {
   base: {
