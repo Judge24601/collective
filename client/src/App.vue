@@ -60,15 +60,6 @@ export default {
   }
 };
 
-<script>
-export default {
-  mounted() {
-    // let stripeScript = document.createElement("script");
-    // stripeScript.setAttribute("src", "https://js.stripe.com/v3/");
-    // document.head.appendChild(stripeScript);
-  }
-};
-</script>
 
 <style>
 #app {
@@ -82,7 +73,7 @@ export default {
 }
 #nav {
   width: 100%;
-  z-index: -1;
+  z-index: 5;
   margin-top:-0.5rem;
   
 }

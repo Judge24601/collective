@@ -10,7 +10,7 @@
                         <base-button type="success"  class="newPost" @click="modals.modal0 = true">
                             New Post
                         </base-button>
-                        <router-link to="/checkout">TEMP</router-link>
+                        <router-link to="/search">TEMP</router-link>
                         <modal :show.sync="modals.modal0">
                             <template slot="header">
                                 <h5 class="modal-title" id="exampleModalLabel">New Post</h5>

@@ -8,6 +8,7 @@ import NewPost from "@/components/NewPost.vue";
 import EditPost from "@/components/EditPost.vue";
 import { authGuard } from "../auth/authGuard";
 import Checkout from "@/components/Checkout.vue";
+import Search from "../views/Search.vue";
 
 Vue.use(VueRouter);
 
@@ -47,6 +48,11 @@ const routes = [
     path: "/checkout",
     name: "Checkout",
     component: Checkout
+  },
+  {
+    path:"/search",
+    name: "Join a new Collective",
+    component: Search
   },
   {
     path: "/about",
