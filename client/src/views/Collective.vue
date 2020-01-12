@@ -160,29 +160,10 @@ export default {
     console.log(process.env.VUE_APP_KEY);
     console.log(process.env.VUE_APP_CLUSTER);
     pusher = new Pusher(process.env.VUE_APP_KEY, { cluster: process.env.VUE_APP_CLUSTER });
-    /*pusher.connection.bind('connected', data => {
-      this.socketId = pusher.connection.socket_id;
-    });*/
-    pusher.subscribe(this.user.collective);
-    pusher.bind('vote', data => {
-        //var co = data.pollId;
-        var choice = data.choice;
-        console.log('sub sent vals');
-        this.pollVotes[choice]++;
-        this.$refs.votesChart.updateSeries(this.pollVotes);
-        /*voteCount = document.querySelector('#vote-count-' + pollId + '-' + choice);
-        voteCount.textContent++;
-        // we'll flash the colour for a moment
-        var color = voteCount.style.color;
-        setTimeout(function () {
-            voteCount.style.color = color;
-        }, 2000);
-        voteCount.style.color = 'green';*/
-    });
+    this.userSetup();
   },
   mounted() {
     this.getPosts();
-    this.getPollOptions();
   },
   computed: {
     user() {
@@ -192,10 +173,12 @@ export default {
   watch: {
     user() {
       console.log("test", this.user);
-      if (this.user && this.user.collective == undefined) {
-        this.$router.push({ name: "landing" });
+      if (this.user != '' && this.user != undefined) {
+        if(this.user.collective == undefined) {
+          this.$router.push({ name: "landing" });
+        }
+        this.getPosts()
       }
-      this.getPosts()
     }
   },
   methods: {
@@ -207,6 +190,34 @@ export default {
         this.$store.commit('updateUser', user);
         this.voted = true;
       }
+    },
+    async userSetup() {
+      await this.$auth.handleRedirectCallback();
+      let email = this.$auth.user.email
+      let user = await UserService.getUser(email)
+      this.$store.commit('updateUser', user.data)
+      
+      /*pusher.connection.bind('connected', data => {
+        this.socketId = pusher.connection.socket_id;
+      });*/
+      console.log("setting up", this.user)
+      pusher.subscribe(this.user.collective);
+      pusher.bind('vote', data => {
+          //var co = data.pollId;
+          var choice = data.choice;
+          console.log('sub sent vals');
+          this.pollVotes[choice]++;
+          this.$refs.votesChart.updateSeries(this.pollVotes);
+          /*voteCount = document.querySelector('#vote-count-' + pollId + '-' + choice);
+          voteCount.textContent++;
+          // we'll flash the colour for a moment
+          var color = voteCount.style.color;
+          setTimeout(function () {
+              voteCount.style.color = color;
+          }, 2000);
+          voteCount.style.color = 'green';*/
+      });
+      this.getPollOptions();
     },
     async tempTest() {
       this.pollVotes[0]++;
