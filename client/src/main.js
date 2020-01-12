@@ -4,9 +4,11 @@ import App from "./App.vue";
 import "./registerServiceWorker";
 import router from "./router/index";
 import store from "./store";
+import AsyncComputed from 'vue-async-computed';
 
 Vue.use(Argon);
 
+Vue.use(AsyncComputed);
 // Import the Auth0 configuration
 import { domain, clientId } from "../auth-config.json";
 

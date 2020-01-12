@@ -22,7 +22,8 @@ const routes = [
   {
     path: "/landing",
     name: "landing",
-    component: Landing
+    component: Landing,
+    beforeEnter: authGuard,
   },
   {
     path: "/login",

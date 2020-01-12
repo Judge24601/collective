@@ -30,23 +30,59 @@
         </base-nav>
       </div>
     </div>
+    <modal :show.sync="authenticatedNotCreated">
+      <template slot="header">
+          <h5 class="modal-title" id="exampleModalLabel">New Post</h5>
+      </template>
+      <checkout></checkout>
+      <template slot="footer">
+          <base-button type="secondary" @click="modals.modal0 = false">Close</base-button>
+          <base-button type="primary" >Save</base-button>
+      </template>
+    </modal>
     <router-view />
   </div>
 </template>
 <script>
 import BaseNav from "@/components/BaseNav";
+import UserService from "@/services/UserService";
 //import BaseDropdown from "@/components/BaseDropdown";
 import CloseButton from "@/components/CloseButton";
+import Modal from "@/components/Modal";
+import Checkout from "@/components/Checkout";
+import { mapMutations } from 'vuex'
+
 export default {
     components: {
       BaseNav,
-      //BaseDropdown,
-      CloseButton
+      CloseButton,
+      Modal,
+      Checkout,
+    },
+    ...mapMutations([
+      'updateUser', // map `this.increment()` to `this.$store.commit('increment')`
+    ]),
+    asyncComputed: {
+      authenticatedNotCreated: async function () {
+        if (this.$store.state.user != undefined) {
+          return false
+        }
+        console.log("auth!", this.$auth.user)
+        if (this.$auth.isAuthenticated){
+          let email = this.$auth.user.email
+          let user = await UserService.getUser(email)
+          console.log(user)
+          this.$store.commit('updateUser', user.data)
+          return (this.$store.state.user.customerId != false)
+        }
+        return false
+      }
     },
     methods: {
       // Log the user in
-      login() {
+      login() { 
         this.$auth.loginWithRedirect();
+        this.getUser()
       },
       // Log the user out
       logout() {
@@ -59,7 +95,6 @@ export default {
 </script>
   }
 };
-
 
 <style>
 #app {

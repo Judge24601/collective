@@ -42,7 +42,7 @@ export default {
           email: this.$auth.user.email,
           payment_method: paymentMethod
         });
-        this.$router.push({ name: "collective" });
+        this.$store.state.user = UserService.getUser();
         const customer = response.json();
         // The customer has been created
 
