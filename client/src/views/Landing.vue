@@ -80,6 +80,7 @@ export default {
               collective: id
           })
           this.modals.modal0 = false
+          this.$router.push({ name: "collective" });
       }
     }   
 };
