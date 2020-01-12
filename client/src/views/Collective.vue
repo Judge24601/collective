@@ -25,8 +25,8 @@
                       </div>
                     </div>
                     <div v-if="voted" class="pie-chart-container">
-                      <apexchart ref="votesChart" type="pie" width="380" :options="chartOptions" :series="pollVotes"></apexchart>
-                      <base-button type="success" @click="tempTest">Temp test</base-button>
+                      <apexchart ref="votesChart" type="pie" width="600" :options="chartOptions" :series="pollVotes"></apexchart>
+                      <!-- <base-button type="success" @click="tempTest">Temp test</base-button> -->
                     </div>
                   </div>
                 </card>
@@ -322,6 +322,7 @@ export default {
       text-align: right;
     }
     .pie-chart-container {
+      min-height: 10rem;
       display:flex;
       justify-content: center;
       text-align: left;
