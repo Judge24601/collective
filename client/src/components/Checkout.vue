@@ -3,18 +3,21 @@
     <!-- Use the CSS tab above to style your Element's container. -->
     <div id="card-element" class="MyCardElement">
       <!-- Elements will create input elements here -->
-      <p>hi</p>
     </div>
 
     <!-- We'll put the error messages in this element -->
     <div id="card-errors" role="alert"></div>
-    <button v-on:click="purchase" id="submit">Purchase</button>
+    <div class="row">
+      </div>
+    <base-button v-on:click="purchase" style="margin-top:4em;" id="submit">Purchase</base-button>
+    
   </div>
 </template>
 <script src="https://js.stripe.com/v3/"></script>
 
 <script>
 import UserService from "@/services/UserService";
+import BaseButton from "@/components/BaseButton";
 import Vue from 'vue';
 let stripe = Stripe("pk_test_mCaKNqWh4ybhZDzoJ6WiMk9d00bgu8VK6V");
 let elements = stripe.elements();
@@ -22,9 +25,6 @@ let cardElement = elements.create("card", style);
 
 export default {
   mounted: function() {
-    // let stripeScript = document.createElement("script");
-    // stripeScript.setAttribute("src", "https://js.stripe.com/v3/");
-    // document.head.appendChild(stripeScript);
     cardElement.mount("#card-element");
   },
   methods: {
