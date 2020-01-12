@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <div id="nav" style="position: fixed">
+  <div id="app" class="bg-gradient-default">
+    <div v-if="$route.name !== 'landing'" id="nav" style="position: fixed">
       <div style="position: relative">
         <base-nav type="default" effect="dark" expand>
             <h4 class="navbar-brand">collective</h4>
@@ -25,7 +25,6 @@
                       <base-button class="navbar-brand" v-if="$auth.isAuthenticated" @click="logout">Log out</base-button>
                     </div>
                 </li>
-              
             </ul>
         </base-nav>
       </div>
@@ -64,10 +63,13 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  height: 100%;
+  overflow: scroll;
 }
 #nav {
   width: 100%;
   z-index: 5;
   margin-top:-0.5rem;
+  
 }
 </style>
