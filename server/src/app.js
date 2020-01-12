@@ -29,19 +29,21 @@ var UserModel = userConnection.model('Users', User);
 // This creates a new Customer and attaches the PaymentMethod in one API call.
 
 app.post("/users", async (req,res) => {
-  console.log("Hi");
+  console.log("Hi again");
   var db = req.db;
+  console.log(req)
   var email = req.body.email;
   var payment_method = req.body.payment_method;
   var name = req.body.name;
+  console.log("before customer")
   const customer = await stripe.customers.create({
-    payment_method: payment_method,
+    payment_method: payment_method.id,
     email: email,
     invoice_settings: {
-      default_payment_method: payment_method,
+      default_payment_method: payment_method.id,
     },
   });
-  
+  console.log("past customer")  
   var customerId = customer.id;
 
   const subscription = await stripe.subscriptions.create({
@@ -49,7 +51,7 @@ app.post("/users", async (req,res) => {
     items: [{ plan: "plan_GX4AB0oH5nLgdc" }],
     expand: ["latest_invoice.payment_intent"]
   });
-
+  console.log("past sub")
   var user = new UserModel({
     name: name,
     email: email,
