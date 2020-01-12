@@ -213,6 +213,23 @@ app.post("/collectives/:collectiveId", (req, res) => {
   })
 });
 
+// Increment poll option
+app.post("/collectives/:collectiveId/vote", (req, res) => {
+  const choice = req.body.choice;
+  const identifier = `pollChoices.${choice}.votes`;
+  CollectiveModel.findById(req.params.collectiveId, function(error, collective) {
+    console.log('Found collective: ' + collective.title + ' votes: ' + collective.pollChoices[0].votes);
+    collective.pollChoices[choice].votes++;
+    collective.save();
+    res.send('Success');
+  });
+
+  /*
+  CollectiveModel.update({_id: req.params.collectiveId}, {$inc: {[identifier]: 1}}, {}, (err, numberAffected) => {
+      res.send('Success');
+  });*/
+});
+
 // Untested endpoints
 
 // Fetch single post
