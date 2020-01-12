@@ -10,6 +10,7 @@ var Collective = require("../models/collective");
 var User = require("../models/user");
 //var Poll = require("../models/poll");
 const app = express();
+const stripe = require('stripe')('sk_test_tcmBJCQxZTDZxbo6Y9C4F6HX00qnugoRlW');
 app.use(morgan("combined"));
 app.use(bodyParser.json());
 app.use(cors());
@@ -24,10 +25,20 @@ db.once("open", function(callback) {
   console.log("Connection Succeeded");
 });
 
-var PostModel = postConnection.model('Posts', Post);
-var CollectiveModel = collectiveConnection.model('Collectives', Collective);
-var UserModel = userConnection.model('Users', User);
-//var pollModel = pollConnection.model('Polls', Poll);
+// This creates a new Customer and attaches the PaymentMethod in one API call.
+const customer = await stripe.customers.create({
+  payment_method: 'pm_1FU2bgBF6ERF9jhEQvwnA7sX',
+  email: 'jenny.rosen@example.com',
+  invoice_settings: {
+    default_payment_method: 'pm_1FU2bgBF6ERF9jhEQvwnA7sX',
+  },
+});
+
+const subscription = await stripe.subscriptions.create({
+  customer: "cus_G02hIo15n8CU1s",
+  items: [{ plan: "plan_FSDjyHWis0QVwl" }],
+  expand: ["latest_invoice.payment_intent"]
+});
 
 // Add new post
 app.post("/posts", (req, res) => {

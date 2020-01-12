@@ -1,3 +1,4 @@
+<script src="https://js.stripe.com/v3/"></script>
 <template>
   <div id="app" class="bg-gradient-default">
     <div v-if="$route.name !== 'landing'" id="nav" style="position: fixed">
@@ -32,6 +33,7 @@
     <router-view />
   </div>
 </template>
+<<<<<<< HEAD
 <script>
 import BaseNav from "@/components/BaseNav";
 //import BaseDropdown from "@/components/BaseDropdown";
@@ -56,6 +58,19 @@ export default {
     }
   }
 </script>
+=======
+
+<script>
+export default {
+  mounted() {
+    // let stripeScript = document.createElement("script");
+    // stripeScript.setAttribute("src", "https://js.stripe.com/v3/");
+    // document.head.appendChild(stripeScript);
+  }
+};
+</script>
+
+>>>>>>> Initialized Stripe
 <style>
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
