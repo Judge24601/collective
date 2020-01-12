@@ -32,7 +32,9 @@
     </div>
     <modal :show.sync="authenticatedNotCreated">
       <template slot="header">
+        <div class="container">
           <h5 class="modal-title" id="exampleModalLabel">Set up Subscription</h5>
+          </div>
       </template>
       <checkout @exit="closeModal"></checkout>
       <!-- <template slot="footer">
