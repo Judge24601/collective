@@ -3,11 +3,11 @@
         <div class="position-relative">
             <!-- shape Hero -->
             <section class="section-shaped my-1">
-                <div class="shape shape-style-1 bg-gradient-default shape-skew">
+                <div class="shape shape-style-1 bg-gradient-default">
                 </div>
                 <div class="container">
                     <div>
-                        <base-button type="success" @click="modals.modal0 = true">
+                        <base-button type="success"  class="newPost" @click="modals.modal0 = true">
                             New Post
                         </base-button>
                         <modal :show.sync="modals.modal0">
@@ -103,3 +103,9 @@ export default {
   }
 };
 </script>
+<style>
+    .newPost {
+        margin-top: -1rem;
+        margin-bottom: 1rem;
+    }
+</style>

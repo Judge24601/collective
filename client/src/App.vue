@@ -2,8 +2,8 @@
   <div id="app">
     <div id="nav">
       <div style="position: relative">
-        <base-nav type="primary" effect="dark" expand>
-            <h2 class="navbar-brand">collective</h2>
+        <base-nav type="default" effect="dark" expand>
+            <h4 class="navbar-brand">collective</h4>
 
             <div class="row" slot="content-header" slot-scope="{closeMenu}">
                 <div class="col-6 collapse-brand">
@@ -20,18 +20,12 @@
                 <li class="nav-item">
                     <div v-if="!$auth.loading">
                       <!-- show login when not authenticated -->
-                      <a class="navbar-brand" v-if="!$auth.isAuthenticated" @click="login">Log in</a>
+                      <base-button class="navbar-brand" v-if="!$auth.isAuthenticated" @click="login">Log in</base-button>
                       <!-- show logout when authenticated -->
-                      <a class="navbar-brand" v-if="$auth.isAuthenticated" @click="logout">Log out</a>
+                      <base-button class="navbar-brand" v-if="$auth.isAuthenticated" @click="logout">Log out</base-button>
                     </div>
                 </li>
-                <base-dropdown tag="li" title="Settings">
-                  <a class="dropdown-item" href="#">Action</a>
-                  <a class="dropdown-item" href="#">Another action</a>
-                  <a class="dropdown-item" href="#">Something else here</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Separated link</a>
-                </base-dropdown>
+              
             </ul>
         </base-nav>
       </div>
@@ -41,12 +35,12 @@
 </template>
 <script>
 import BaseNav from "@/components/BaseNav";
-import BaseDropdown from "@/components/BaseDropdown";
+//import BaseDropdown from "@/components/BaseDropdown";
 import CloseButton from "@/components/CloseButton";
 export default {
     components: {
       BaseNav,
-      BaseDropdown,
+      //BaseDropdown,
       CloseButton
     },
     methods: {
