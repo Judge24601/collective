@@ -14,29 +14,48 @@
             ></span>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <base-dropdown>
-          <base-button slot="title" type="secondary" class="dropdown-toggle">
-            Filter by type of organization
-          </base-button>
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </base-dropdown>
+        <div class="row">
+          <h2 class="white-color">Popular Collectives</h2>
+        </div>
+        <div class="row">
+          <div
+            v-for="(collective, index) in collectives"
+            :key="index"
+            class=" card-cont col-md-4"
+          >
+            <card class="border-0" hover shadow body-classes="py-3">
+              <h3 class="text-primary text-uppercase">
+                {{ collective.title }}
+              </h3>
+              <div class="card-inner">
+                <P class="description mt-1">{{ collective.notes }}</P>
+              </div>
+            </card>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import BaseDropdown from "@/components/BaseDropdown";
-import BaseButton from "@/components/BaseButton";
+import CollectiveService from "@/services/CollectiveService";
 export default {
   name: "search",
-  components: {
-    BaseDropdown,
-    BaseButton
+  components: {},
+  data() {
+    return {
+      collectives: []
+    };
+  },
+  mounted() {
+    this.getCollectives();
+  },
+  methods: {
+    async getCollectives() {
+      const response = await CollectiveService.fetchCollectives();
+      this.collectives = response.data.collectives;
+    }
   }
 };
 </script>
@@ -47,5 +66,8 @@ export default {
 }
 .container {
   height: 100%;
+}
+.white-color {
+  color: #fff;
 }
 </style>

@@ -145,9 +145,22 @@ app.post("/collectives", (req, res) => {
     }
     res.send({
       success: true,
-      message: "Post saved successfully!"
+      message: "Collective saved successfully!"
     });
   });
+});
+
+// Fetch all collectives 
+app.get("/collectives", (req, res) => {
+  console.log("got here")
+  CollectiveModel.find({}, "", function(error, collectives) {
+    if (error) {
+      console.error(error);
+    }
+    res.send({
+      collectives: collectives
+    });
+  }).sort({_id: -1});
 });
 
 // Post new poll option
