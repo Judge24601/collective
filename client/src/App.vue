@@ -60,6 +60,16 @@ export default {
   }
 };
 
+<script>
+export default {
+  mounted() {
+    // let stripeScript = document.createElement("script");
+    // stripeScript.setAttribute("src", "https://js.stripe.com/v3/");
+    // document.head.appendChild(stripeScript);
+  }
+};
+</script>
+
 <style>
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;

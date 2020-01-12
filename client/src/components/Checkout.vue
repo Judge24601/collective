@@ -28,7 +28,6 @@ export default {
   },
   methods: {
     async purchase() {
-        console.log(this.$auth);
       const { paymentMethod, error } = await stripe.createPaymentMethod({
         type: "card",
         card: cardElement,
