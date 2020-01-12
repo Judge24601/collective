@@ -170,6 +170,7 @@ export default {
     async vote() {
       if (this.radioSelected >= 0) {
         await CollectiveService.postVote("5e1aa961c9b1c6285c451bf8", this.radioSelected);
+        await this.getPollOptions();
         await UserService.updateUserVote(this.user.email, true);
         let user = {...this.user, voted: true};
         this.$store.commit('updateUser', user);
@@ -184,6 +185,7 @@ export default {
       const response = await CollectiveService.fetchCollective("5e1aa961c9b1c6285c451bf8");
       this.chartOptions.labels = response.data.pollChoices.map(ans => ans.value);
       this.pollVotes = response.data.pollChoices.map(ans => ans.votes);
+      this.voted = this.user.voted;
     },
     async deletePost(id) {
       await PostsService.deletePost(id);
