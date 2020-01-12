@@ -57,6 +57,20 @@ app.put("/user/:email", (req, res) => {
   });
 });
 
+app.put("/user/:email/voted", (req, res) => {
+  UserModel.findOne({email: req.params.email}, "", function(error, user) {
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    user.voted = req.body.voted;
+    user.save();
+  })
+
+  res.send({success: true, message: "User updated!"});
+})
+
 app.post("/users", async (req,res) => {
   console.log("Hi again");
   var db = req.db;
@@ -217,7 +231,7 @@ app.post("/collectives/:collectiveId/vote", (req, res) => {
   const choice = req.body.choice;
   console.log('here');
   CollectiveModel.findById(req.params.collectiveId, function(error, collective) {
-    console.log('Found collective: ' + collective.title + ' votes: ' + collective.pollChoices[0].votes);
+    console.log('Found collective: ' + collective.title + ' votes: ' + collective.pollChoices[0].votes + " choice: " + choice);
     collective.pollChoices[choice].votes++;
     collective.save();
     res.send('Success');
