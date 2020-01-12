@@ -32,7 +32,6 @@ var UserModel = userConnection.model('Users', User);
 
 // Fetch single user
 app.get("/user/:email", (req, res) => {
-  console.log("get user", req)
   var db = req.db;
   UserModel.findOne({email: req.params.email}, "", function(error, user) {
     if (error) {
@@ -44,7 +43,6 @@ app.get("/user/:email", (req, res) => {
 
 app.put("/user/:email", (req, res) => {
   var db = req.db;
-  console.log(req.params)
   UserModel.findOne({email: req.params.email}, "", function(error, user) {
     if (error) {
       console.error(error);
@@ -76,7 +74,6 @@ app.put("/user/:email/voted", (req, res) => {
 app.post("/users", async (req,res) => {
   console.log("Hi again");
   var db = req.db;
-  console.log(req)
   var email = req.body.email;
   var payment_method = req.body.payment_method;
   var name = req.body.name;
@@ -96,7 +93,7 @@ app.post("/users", async (req,res) => {
     items: [{ plan: "plan_GX4AB0oH5nLgdc" }],
     expand: ["latest_invoice.payment_intent"],
   });
-  var monthlyCharge = subscription.items.plan.amount / 100; 
+  var monthlyCharge = subscription.plan.amount / 100; 
   console.log("past sub")
   var user = new UserModel({
     name: name,
@@ -238,16 +235,17 @@ app.get("/collective/:id", (req,res) =>{
 
 app.put("/collective/:id", (req,res) => {
   var db = req.db;
-  Collective.findById(req.params.id, "title summary notes totalAmount", function(error, post) {
+  CollectiveModel.findById(req.params.id, "title summary notes totalAmount", function(error, collective) {
     if (error) {
       console.error(error);
     }
-
-    collective.title = req.body.title;
-    collective.summary = req.body.summary;
-    collective.notes = req.body.notes;
+    console.log('heyyyyy', req.body)
+    if (collective.totalAmount == undefined) {
+      collective.totalAmount = 0
+    }
     collective.totalAmount = req.body.totalAmount + collective.totalAmount;
-    post.save(function(error) {
+    console.log(collective.totalAmount)
+    collective.save(function(error) {
       if (error) {
         console.log(error);
       }
@@ -263,7 +261,6 @@ app.put("/collective/:id", (req,res) => {
 app.post("/collectives/:collectiveId", (req, res) => {
   var pollOption = req.body.pollOption;
   var collectiveId = req.params.collectiveId
-  console.log(req.body);
   //CollectiveModel.findByIdAndUpdate(collectiveId, {$push: {pollChoices: {values: pollOption, votes: 0}}});
   console.log("Poll option: " + pollOption + " collectiveId: " + collectiveId);
 

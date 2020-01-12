@@ -4,21 +4,20 @@
       <!-- shape Hero -->
       <section class="section-shaped my-1 main">
         <div class="shape shape-style-1 bg-gradient-default"></div>
-          <div class="container">
-            <div class="container new">
-          <base-alert type="success" dismissible>
+          <div class="container new">
+            <base-alert type="success" dismissible>
             <span class="alert-inner--icon"><i class="ni ni-like-2"></i></span>
             <span class="alert-inner--text">
-              <strong>{{ collective.title }} has raised {{collective.totalAmount}} this month! Keep it up!</strong> </span>
-            <button
+              <strong>{{ collective.title }} has raised {{collective.totalAmount}} dollars this month! Keep it up!</strong> </span>
+              <button
               type="button"
               class="close"
               data-dismiss="alert"
               aria-label="Close"
             >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </base-alert>
+               <span aria-hidden="true">&times;</span>
+              </button>
+            </base-alert>
           <div>
               <div class="card-cont"> 
                 <card class="border-0" hover shadow body-classes="py-3">
@@ -103,6 +102,7 @@
                   </card>
               </div>
           </div>
+        </div>
       </section>
       <!-- 1st Hero Variation -->
     </div>
@@ -195,6 +195,9 @@ export default {
         }
         this.getPosts()
       }
+      if (this.user == '') {
+        this.$router.push({ name: "landing" });
+      }
     }
   },
   methods: {
@@ -234,6 +237,7 @@ export default {
           voteCount.style.color = 'green';*/
       });
       this.getPollOptions();
+      this.getCollective();
     },
     async tempTest() {
       this.pollVotes[0]++;
@@ -303,11 +307,14 @@ export default {
       this.getPollOptions();
     },
     async getCollective() {
-      const response = await CollectiveService.getCollective(
+      console.log('hello')
+      const response = await CollectiveService.fetchCollective(
         this.user.collective
       );
-      this.collective = response.data.collective;
+      this.collective = response.data;
+      console.log('res', response.data);
     }
+
   }
 };
 </script>
