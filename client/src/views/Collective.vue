@@ -98,7 +98,7 @@ export default {
   },
   methods: {
     async getPosts() {
-      const response = await PostsService.fetchPosts();
+      const response = await PostsService.fetchPosts(this.user);
       this.posts = response.data.posts;
     },
     async deletePost(id) {
@@ -108,7 +108,8 @@ export default {
     async addPost() {
       await PostsService.addPost({
         title: this.new_title,
-        description: this.new_description
+        description: this.new_description,
+        collectiveId: this.user.collective
       });
       this.modals.modal0 = false
       this.getPosts()

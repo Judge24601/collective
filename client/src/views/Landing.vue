@@ -14,7 +14,7 @@
                             <form>
                                 <base-input alternative v-model="title" placeholder="Title"></base-input>
                                 <base-input alternative v-model="summary" placeholder="Summary"></base-input>
-                                <textarea v-model="notes" class="form-control form-control-alternative" rows="3" placeholder="Notes"></textarea>
+                                <textarea v-model="notes" class="form-control form-control-alternative" rows="3" placeholder="Short Description"></textarea>
                             </form>
                             <template slot="footer">
                                 <base-button type="secondary" @click="modals.modal0 = false">Close</base-button>
@@ -87,7 +87,10 @@ export default {
               email: this.user.email,
               collective: id
           })
+          let user = {...this.user, collective: id}
+          this.$store.commit('updateUser', user)
           this.modals.modal0 = false
+          
           this.$router.push({ name: "collective" });
       }
     }   
