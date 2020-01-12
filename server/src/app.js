@@ -23,10 +23,12 @@ db.on("error", console.error.bind(console, "connection error"));
 db.once("open", function(callback) { 
   console.log("Connection Succeeded");
 });
-
+var PostModel = postConnection.model('Posts', Post);
+var CollectiveModel = collectiveConnection.model('Collectives', Collective);
+var UserModel = userConnection.model('Users', User);
 // This creates a new Customer and attaches the PaymentMethod in one API call.
 
-app.post("/user", async (req,res) => {
+app.post("/users", async (req,res) => {
   console.log("Hi");
   var db = req.db;
   var email = req.body.email;
