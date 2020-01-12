@@ -2,7 +2,7 @@
     <div>
         <div class="position-relative">
             <!-- shape Hero -->
-            <section class="section-shaped my-1">
+            <section class="section-shaped my-1 main">
                 <div class="shape shape-style-1 bg-gradient-default">
                 </div>
                 <div class="container">
@@ -107,5 +107,8 @@ export default {
     .newPost {
         margin-top: -1rem;
         margin-bottom: 1rem;
+    }
+    .main {
+        padding-top: 3.5rem ;
     }
 </style>

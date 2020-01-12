@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div id="nav">
+    <div id="nav" style="position: fixed">
       <div style="position: relative">
         <base-nav type="default" effect="dark" expand>
             <h4 class="navbar-brand">collective</h4>
@@ -65,5 +65,9 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-
+#nav {
+  width: 100%;
+  z-index: 5;
+  margin-top:-0.5rem;
+}
 </style>
