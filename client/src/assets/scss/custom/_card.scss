@@ -22,13 +22,19 @@
             
         }
         .fa-thumbs-up {
-            &:hover {
-                color: $success;
+            &:hover{
+                color: $success !important;
             }
+        }
+        .good{
+            color: $success !important;
+        }
+        .bad{
+            color: $danger !important;
         }
         .fa-thumbs-down {
             &:hover {
-                color: $danger  ;
+                color: $danger  !important;
             }
         }
     }
