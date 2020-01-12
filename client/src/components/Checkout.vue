@@ -15,6 +15,7 @@
 
 <script>
 import UserService from "@/services/UserService";
+import Vue from 'vue';
 let stripe = Stripe("pk_test_mCaKNqWh4ybhZDzoJ6WiMk9d00bgu8VK6V");
 let elements = stripe.elements();
 let cardElement = elements.create("card", style);
@@ -36,13 +37,14 @@ export default {
         }
       });
       try {
-        console.log("HI");
+        this.$emit("exit", true)
         const response = await UserService.addUser({
           name: this.$auth.user.name,
           email: this.$auth.user.email,
           payment_method: paymentMethod
         });
-        this.$store.state.user = UserService.getUser();
+        let user = await UserService.getUser(this.$auth.user.email);
+        this.$store.commit('updateUser', user.data);
         const customer = response.json();
         // The customer has been created
 
