@@ -42,7 +42,7 @@ export default {
           email: "jenny.rosen@example.com",
           payment_method: "pm_1FU2bgBF6ERF9jhEQvwnA7sX"
         });
-        this.$router.push({ name: "user" });
+        this.$router.push({ name: "collective" });
         const customer = response.json();
         // The customer has been created
 
