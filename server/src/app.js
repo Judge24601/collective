@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
+const passport = require("passport");
+
 var Post = require("../models/post");
 const app = express();
 app.use(morgan("combined"));

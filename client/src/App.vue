@@ -1,8 +1,12 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <div v-if="!$auth.loading">
+      <!-- show login when not authenticated -->
+      <base-button v-if="!$auth.isAuthenticated" @click="login">Log in</base-button>
+      <!-- show logout when authenticated -->
+      <base-button v-if="$auth.isAuthenticated" @click="logout">Log out</base-button>
+      </div>
     </div>
     <router-view />
   </div>

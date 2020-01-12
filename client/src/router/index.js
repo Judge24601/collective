@@ -5,6 +5,7 @@ import Login from "../views/Login.vue";
 import Posts from "@/components/Posts.vue";
 import NewPost from "@/components/NewPost.vue";
 import EditPost from "@/components/EditPost.vue";
+import Header from "@/layout/starter/StarterHeader";
 
 Vue.use(VueRouter);
 
@@ -12,6 +13,7 @@ const routes = [
   {
     path: "/",
     name: "landing",
+    header: Header,
     component: Landing
   },
   {
