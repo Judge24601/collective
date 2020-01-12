@@ -118,4 +118,8 @@ export default {
         margin-top: -1rem;
         margin-bottom: 1rem;
     }
+    .main {
+      margin-top: 3.5rem !important;
+      margin-bottom: 2rem !important;
+    }
 </style>
