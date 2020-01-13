@@ -1,5 +1,6 @@
 # collective
-NWHacks 2020 baybee
+NWHacks 2020
+
 # Inspiration
 This project was inspired by one of the group member's grandmother and her friends. Each month, the grandmother and her friends each contribute $100 to a group donation, then discuss and decide where the money should be donated to. We found this to be a really interesting concept for those that aren't set on always donating to the same charity. As well, it is a unique way to spread awareness and promote charity in communities. We wanted to take this concept, and make it possible to join globally.
 
